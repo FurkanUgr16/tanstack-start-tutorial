@@ -1,7 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { sampleProducts } from '@/db/seed'
 
 export const Route = createFileRoute('/products/$id')({
   component: RouteComponent,
+  loader: async ({ params }) => {
+    await sampleProducts.find((product) => product.id === params.id)
+  },
 })
 
 function RouteComponent() {

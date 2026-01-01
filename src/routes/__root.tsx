@@ -1,61 +1,74 @@
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
+import {
+  HeadContent,
+  Scripts,
+  createRootRouteWithContext,
+} from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 
+import { QueryClientProvider } from '@tanstack/react-query'
 import Header from '../components/Header'
 
 import appCss from '../styles.css?url'
+import type { QueryClient } from '@tanstack/react-query'
 
-export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      {
-        charSet: 'utf-8',
-      },
-      {
-        name: 'viewport',
-        content: 'width=device-width, initial-scale=1',
-      },
-      {
-        title: 'TanStack Start Starter',
-      },
-    ],
-    links: [
-      {
-        rel: 'stylesheet',
-        href: appCss,
-      },
-    ],
-  }),
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
+  {
+    head: () => ({
+      meta: [
+        {
+          charSet: 'utf-8',
+        },
+        {
+          name: 'viewport',
+          content: 'width=device-width, initial-scale=1',
+        },
+        {
+          title: 'TanStack Start Starter',
+        },
+      ],
+      links: [
+        {
+          rel: 'stylesheet',
+          href: appCss,
+        },
+      ],
+    }),
 
-  shellComponent: RootDocument,
-})
+    shellComponent: RootDocument,
+  },
+)
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        <div className="min-h-screen bg-slate-100">
-          <Header />
-          <main className="mx-auto max-w-6xl px-4 py-6">{children}</main>
-        </div>
+  const { queryClient } = Route.useRouteContext()
 
-        <TanStackDevtools
-          config={{
-            position: 'bottom-right',
-          }}
-          plugins={[
-            {
-              name: 'Tanstack Router',
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-          ]}
-        />
-        <Scripts />
-      </body>
-    </html>
+  return (
+    <QueryClientProvider client={queryClient}>
+      <html lang="en">
+        <head>
+          <HeadContent />
+        </head>
+        <body>
+          <div className="min-h-screen bg-slate-100">
+            <Header />
+            <main className="mx-auto max-w-6xl px-4 py-6">{children}</main>
+          </div>
+
+          <TanStackDevtools
+            config={{
+              position: 'bottom-right',
+            }}
+            plugins={[
+              {
+                name: 'Tanstack Router',
+                render: <TanStackRouterDevtoolsPanel />,
+              },
+            ]}
+          />
+          <TanStackDevtools />
+          <Scripts />
+        </body>
+      </html>
+    </QueryClientProvider>
   )
 }
