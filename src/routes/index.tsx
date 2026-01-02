@@ -6,12 +6,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { sampleProducts } from '@/db/seed'
+
 import { ProductCard } from '@/components/ProductCard'
+import { getRecommendedProducts } from '@/data/products'
 
 export const Route = createFileRoute('/')({
-  loader: () => {
-    return { products: sampleProducts }
+  loader: async () => {
+    const products = await getRecommendedProducts()
+    return { products }
   },
   component: App,
 })

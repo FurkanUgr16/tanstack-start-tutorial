@@ -22,12 +22,6 @@ export default function Header() {
             <Link className="rounded-lg px-3 py-1 " to="/products">
               Products
             </Link>
-            <Link
-              className="rounded-lg px-3 py-1 transition"
-              to="/create-product"
-            >
-              Create Product
-            </Link>
           </nav>
         </div>
         <div className="flex items-center gap-2">

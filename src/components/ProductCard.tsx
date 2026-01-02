@@ -9,12 +9,9 @@ import {
   CardTitle,
 } from './ui/card'
 import { Button } from './ui/button'
-import type { Products } from '@/types'
-import { cn } from '@/lib/utils'
 
-type productProps = {
-  product: Products
-}
+import type { ProductSelect } from '@/db/schema'
+import { cn } from '@/lib/utils'
 
 const inventoryTone = {
   'in-stock': 'bg-emerald-50 text-emerald-600 border-emerald-100',
@@ -22,12 +19,12 @@ const inventoryTone = {
   preorder: 'bg-indigo-50 text-indigo-600 border-indigo-100',
 }
 
-export const ProductCard = ({ product }: productProps) => {
+export const ProductCard = ({ product }: { product: ProductSelect }) => {
   return (
     <Link
       className="cursor-pointer h-full transition duration-300 hover:-translate-y-1 hover:shadow-md"
       to="/products/$id"
-      params={{ id: '0' }}
+      params={{ id: product.id }}
     >
       <Card>
         <CardHeader>
@@ -50,7 +47,7 @@ export const ProductCard = ({ product }: productProps) => {
           <span
             className={cn(
               'rounded-full border px-3 py-1 text-xs font-semibold',
-              inventoryTone[product.inventory as keyof typeof inventoryTone],
+              inventoryTone[product.inventory],
             )}
           >
             {product.inventory === 'in-stock'
